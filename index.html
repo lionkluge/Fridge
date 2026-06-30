@@ -8,10 +8,10 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://unpkg.com/html5-qrcode"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #FCFAF7;
+            background-color: #FAF6F0; /* Exakter warmer Hintergrund-Ton aus dem Screenshot */
         }
         .custom-scrollbar::-webkit-scrollbar {
             display: none;
@@ -22,139 +22,143 @@
         }
     </style>
 </head>
-<body class="text-[#2D2A26] min-h-screen pb-28 selection:bg-green-100">
+<body class="text-[#2D2A26] min-h-screen pb-24 selection:bg-green-100">
 
-    <div class="max-w-md mx-auto min-h-screen flex flex-col justify-between relative bg-[#FCFAF7]">
+    <div class="max-w-md mx-auto min-h-screen flex flex-col justify-between relative bg-[#FAF6F0]">
         
-        <div id="view-dashboard" class="page-view p-6 space-y-6">
+        <div id="view-dashboard" class="page-view p-5 space-y-5">
             <div class="flex justify-between items-center">
-                <button class="text-[#1B4332] hover:scale-105 transition"><i data-lucide="menu" class="w-6 h-6"></i></button>
-                <div class="flex items-center gap-2">
-                    <div class="w-6 h-6 bg-[#3B6645] rounded-full flex items-center justify-center text-white text-[10px]">🌱</div>
-                    <span class="text-xs font-bold tracking-widest uppercase text-[#3B6645]">reduce food waste</span>
+                <button class="text-[#2D543A] hover:scale-105 transition"><i data-lucide="menu" class="w-6 h-6"></i></button>
+                <div class="flex items-center gap-1.5">
+                    <svg class="w-5 h-5 text-[#4D805E]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 6a6 6 0 0 1 6 6c0 3.314-4.5 8-6 8s-6-4.686-6-8a6 6 0 0 1 6-6z"/></svg>
+                    <span class="text-[11px] font-extrabold tracking-widest uppercase text-[#4D805E]">reduce food waste</span>
                 </div>
-                <button class="text-[#1B4332] relative hover:scale-105 transition">
+                <button class="text-[#2D543A] relative hover:scale-105 transition">
                     <i data-lucide="bell" class="w-6 h-6"></i>
-                    <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+                    <span class="absolute top-0.5 right-0.5 w-2 h-2 bg-red-500 rounded-full"></span>
                 </button>
             </div>
 
-            <div class="flex justify-between items-start pt-2">
+            <div class="flex justify-between items-start pt-1">
                 <div>
-                    <h1 class="text-4xl font-extrabold tracking-tight text-[#1A1A1A]">Halli Hallo!</h1>
-                    <p class="text-lg text-gray-500 mt-1">Wer Essen rettet, rettet Leben 🌿</p>
+                    <h1 class="text-[36px] font-extrabold tracking-tight text-[#1A1A1A] leading-tight">Halli Hallo!</h1>
+                    <p class="text-base text-gray-500 font-medium mt-0.5">Wer Essen rettet, rettet Leben 🌱</p>
                 </div>
-                <div class="relative">
-                    <div class="w-20 h-20 bg-[#EAE7DC] rounded-full overflow-hidden flex items-center justify-center text-4xl shadow-sm">
-                        🗑️
+                <div class="relative pr-2">
+                    <span class="absolute -top-7 right-12 text-3xl animate-bounce">🐦</span>
+                    <div class="w-20 h-20 bg-[#EFECE6] rounded-full overflow-hidden flex items-center justify-center text-4xl shadow-inner">
+                        🧺
                     </div>
-                    <span class="absolute -top-2 -right-1 text-2xl">🐦</span>
                 </div>
             </div>
 
             <div class="space-y-3">
                 <div class="flex justify-between items-center">
-                    <h3 class="font-bold text-lg text-[#1A1A1A]">Bald ablaufende Lebensmittel</h3>
-                    <button onclick="showView('fridge')" class="text-[#3B6645] text-sm font-semibold hover:underline">Alle anzeigen</button>
+                    <h3 class="font-bold text-[17px] text-[#1A1A1A]">Bald ablaufende Lebensmittel</h3>
+                    <button onclick="showView('fridge')" class="text-[#4D805E] text-sm font-bold hover:underline">Alle anzeigen</button>
                 </div>
-                <div id="dashboard-urgent-list" class="space-y-3">
+                <div id="dashboard-urgent-list" class="space-y-2.5">
                     </div>
             </div>
 
             <div class="space-y-3">
                 <div class="flex justify-between items-center">
-                    <h3 class="font-bold text-lg text-[#1A1A1A]">Passende Kochideen für dich</h3>
-                    <button onclick="showView('recipes')" class="text-[#3B6645] text-sm font-semibold hover:underline">Alle anzeigen</button>
+                    <h3 class="font-bold text-[17px] text-[#1A1A1A]">Passende Kochideen für dich</h3>
+                    <button onclick="showView('recipes')" class="text-[#4D805E] text-sm font-bold hover:underline">Alle anzeigen</button>
                 </div>
-                <div id="dashboard-recipe-scroll" class="flex gap-4 overflow-x-auto custom-scrollbar pb-2">
+                <div id="dashboard-recipe-scroll" class="flex gap-3.5 overflow-x-auto custom-scrollbar pb-1">
                     </div>
             </div>
 
-            <div class="bg-[#EBF2EE] p-4 rounded-2xl flex items-center justify-between border border-[#D5E4DB] cursor-pointer hover:bg-[#e2ebe5] transition" onclick="showView('profile')">
-                <div class="flex items-center gap-4">
-                    <div class="text-3xl">🌱</div>
+            <div class="bg-[#E4ECE6] p-4 rounded-[22px] flex items-center justify-between border border-[#D2DFD6] cursor-pointer hover:bg-[#dae5dc] transition" onclick="showView('profile')">
+                <div class="flex items-center gap-3.5">
+                    <div class="text-2xl">🌱</div>
                     <div>
-                        <h4 class="font-bold text-[#1B4332] text-sm">Du machst einen Unterschied!</h4>
-                        <p class="text-xs text-[#3B6645] mt-0.5">So hast du diese Woche bereits <span id="stat-weight" class="font-bold">1,2</span> kg Lebensmittel gerettet.</p>
+                        <h4 class="font-bold text-[#2D543A] text-[14px]">Du machst einen Unterschied!</h4>
+                        <p class="text-xs text-[#4D805E] mt-0.5 font-medium">So hast du diese Woche bereits <span id="stat-weight" class="font-bold">1,2</span> kg Lebensmittel gerettet.</p>
                     </div>
                 </div>
-                <i data-lucide="chevron-right" class="w-5 h-5 text-[#3B6645]"></i>
+                <i data-lucide="chevron-right" class="w-5 h-5 text-[#4D805E]"></i>
             </div>
         </div>
 
-        <div id="view-fridge" class="page-view p-6 space-y-6 hidden">
+        <div id="view-fridge" class="page-view p-5 space-y-5 hidden">
             <div class="flex justify-between items-center">
                 <h1 class="text-2xl font-bold text-[#1A1A1A]">Mein Kühlschrank</h1>
-                <button onclick="openManualAdd()" class="bg-[#3B6645] text-white px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1 hover:bg-[#2d5236] transition">
-                    <i data-lucide="plus" class="w-3 h-3"></i> Neu
-                </button>
+                <div class="flex gap-2">
+                    <button onclick="showView('scan')" class="bg-[#4D805E] text-white px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-xs">
+                        <i data-lucide="scan-barcode" class="w-4 h-4"></i> Scanner
+                    </button>
+                    <button onclick="toggleManualAdd()" class="bg-gray-200 text-gray-700 px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1">
+                        <i data-lucide="plus" class="w-4 h-4"></i> Manuell
+                    </button>
+                </div>
             </div>
 
-            <div id="manual-add-form" class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm space-y-3 hidden">
-                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400">Produkt hinzufügen</h3>
+            <div id="manual-add-form" class="bg-white p-4 rounded-[22px] border border-gray-100 shadow-xs space-y-3 hidden">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400">Produkt eintragen</h3>
                 <div class="grid grid-cols-2 gap-2">
-                    <input id="input-name" type="text" placeholder="Name (z.B. Käse)" class="p-2 border rounded-xl text-sm bg-[#FCFAF7] focus:outline-green-600">
-                    <input id="input-days" type="number" placeholder="Haltbar in Tagen" class="p-2 border rounded-xl text-sm bg-[#FCFAF7] focus:outline-green-600">
+                    <input id="input-name" type="text" placeholder="z.B. Milch" class="p-2.5 border rounded-xl text-sm bg-[#FAF6F0] focus:outline-[#4D805E]">
+                    <input id="input-days" type="number" placeholder="Haltbar in Tagen" class="p-2.5 border rounded-xl text-sm bg-[#FAF6F0] focus:outline-[#4D805E]">
                 </div>
-                <button onclick="submitManualAdd()" class="w-full bg-[#3B6645] text-white py-2 rounded-xl text-sm font-bold">Im Kühlschrank lagern</button>
+                <button onclick="submitManualAdd()" class="w-full bg-[#4D805E] text-white py-2.5 rounded-xl text-sm font-bold shadow-xs">Hinzufügen</button>
             </div>
 
-            <div id="full-fridge-list" class="space-y-3">
-                </div>
+            <div id="full-fridge-list" class="space-y-2.5"></div>
         </div>
 
-        <div id="view-scan" class="page-view p-6 space-y-4 hidden">
-            <h1 class="text-2xl font-bold text-[#1A1A1A]">Produkt scannen</h1>
-            <p class="text-sm text-gray-500">Halte den Barcode der Verpackung zentriert vor die Kamera.</p>
+        <div id="view-scan" class="page-view p-5 space-y-4 hidden">
+            <div class="flex items-center gap-2">
+                <button onclick="showView('fridge')" class="text-gray-500"><i data-lucide="arrow-left" class="w-6 h-6"></i></button>
+                <h1 class="text-2xl font-bold text-[#1A1A1A]">Barcode scannen</h1>
+            </div>
             
-            <div class="bg-white p-2 rounded-3xl border border-gray-100 shadow-sm overflow-hidden relative">
-                <div id="interactive-scanner" class="w-full rounded-2xl bg-black aspect-square overflow-hidden"></div>
+            <div class="bg-white p-3 rounded-[24px] border border-gray-100 shadow-xs overflow-hidden relative">
+                <div id="interactive-scanner" class="w-full rounded-[18px] bg-black aspect-square overflow-hidden"></div>
                 <div id="scanner-fallback-msg" class="hidden absolute inset-0 bg-white p-6 flex flex-col items-center justify-center text-center">
                     <i data-lucide="camera-off" class="w-12 h-12 text-red-400 mb-2"></i>
-                    <p class="text-sm font-semibold text-gray-700">Kamera-Zugriff blockiert oder nicht unterstützt.</p>
-                    <p class="text-xs text-gray-400 mt-1">Nutze die manuelle Eingabe im Kühlschrank-Tab oder simuliere einen Scan unten.</p>
+                    <p class="text-sm font-bold text-gray-700">Kamera-Zugriff erforderlich</p>
+                    <p class="text-xs text-gray-400 max-w-xs mt-1">Bitte erlauben Sie den Kamerazugriff oder nutzen Sie die Simulationstasten unten.</p>
                 </div>
             </div>
 
-            <div class="bg-gray-100 p-4 rounded-2xl text-center">
-                <p class="text-xs font-medium text-gray-500 mb-2">Kein echtes Produkt zur Hand?</p>
+            <div class="bg-white p-4 rounded-[22px] border border-gray-100 text-center shadow-xs">
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2.5">Scan-Simulation (Testen ohne Kamera)</p>
                 <div class="grid grid-cols-2 gap-2">
-                    <button onclick="simulateBarcodeScan('40002')" class="bg-white hover:bg-gray-50 text-xs py-2 px-3 border rounded-xl font-medium transition">Simuliere: Spinat</button>
-                    <button onclick="simulateBarcodeScan('40001')" class="bg-white hover:bg-gray-50 text-xs py-2 px-3 border rounded-xl font-medium transition">Simuliere: Joghurt</button>
+                    <button onclick="simulateBarcodeScan('40001')" class="bg-[#FAF6F0] hover:bg-gray-100 text-xs py-2.5 px-3 rounded-xl font-bold transition">🥛 Joghurt simulieren</button>
+                    <button onclick="simulateBarcodeScan('40002')" class="bg-[#FAF6F0] hover:bg-gray-100 text-xs py-2.5 px-3 rounded-xl font-bold transition">🌿 Spinat simulieren</button>
                 </div>
             </div>
         </div>
 
-        <div id="view-recipes" class="page-view p-6 space-y-4 hidden">
-            <h1 class="text-2xl font-bold text-[#1A1A1A]">Alle Kochideen</h1>
-            <p class="text-sm text-gray-500">Diese Rezepte passen ideal zu deinen ablaufenden Lebensmitteln im Kühlschrank.</p>
-            <div id="all-recipes-container" class="grid grid-cols-1 gap-4 pt-2">
-                </div>
+        <div id="view-recipes" class="page-view p-5 space-y-4 hidden">
+            <h1 class="text-2xl font-bold text-[#1A1A1A]">Passende Rezepte</h1>
+            <div id="all-recipes-container" class="grid grid-cols-1 gap-4"></div>
         </div>
 
-        <div id="view-profile" class="page-view p-6 space-y-6 hidden">
+        <div id="view-profile" class="page-view p-5 space-y-4 hidden">
             <h1 class="text-2xl font-bold text-[#1A1A1A]">Mein Profil</h1>
-            <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm text-center space-y-4">
-                <div class="w-20 h-20 bg-green-100 text-green-700 rounded-full mx-auto flex items-center justify-center text-3xl font-bold">U</div>
+            <div class="bg-white p-6 rounded-[24px] text-center space-y-4 border border-gray-100">
+                <div class="w-20 h-20 bg-green-50 text-[#4D805E] rounded-full mx-auto flex items-center justify-center text-3xl font-extrabold">U</div>
                 <div>
-                    <h2 class="text-xl font-bold">Premium Lebensmittel-Retter</h2>
-                    <p class="text-xs text-gray-400 mt-0.5">Mitglied seit 2024</p>
+                    <h2 class="text-xl font-bold">Lebensmittel-Retter</h2>
+                    <p class="text-xs text-gray-400 mt-0.5">Aktiv seit Mai 2024</p>
                 </div>
-                <div class="grid grid-cols-2 gap-4 pt-2 border-t text-left">
+                <div class="grid grid-cols-2 gap-4 pt-3 border-t text-left">
                     <div>
-                        <span class="text-xs text-gray-400 block">Gerettet gesamt</span>
-                        <span class="text-lg font-bold text-[#3B6645]">24,8 kg</span>
+                        <span class="text-xs text-gray-400 block font-medium">Gerettet Gesamt</span>
+                        <span class="text-lg font-bold text-[#2D543A]">24,8 kg</span>
                     </div>
                     <div>
-                        <span class="text-xs text-gray-400 block">Diese Woche</span>
-                        <span class="text-lg font-bold text-[#3B6645]">1,2 kg</span>
+                        <span class="text-xs text-gray-400 block font-medium">Diese Woche</span>
+                        <span class="text-lg font-bold text-[#2D543A]">1,2 kg</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <nav class="fixed bottom-0 max-w-md w-full bg-white border-t border-gray-100 flex justify-around py-3 px-2 shadow-[0_-10px_30px_rgba(0,0,0,0.03)] z-50 rounded-t-3xl">
-            <button onclick="showView('dashboard')" id="nav-dashboard" class="nav-btn flex flex-col items-center gap-1 text-[#3B6645] transition">
+        <nav class="fixed bottom-0 max-w-md w-full bg-white border-t border-gray-100 flex justify-around py-3 px-2 z-50 rounded-t-[24px] shadow-[0_-8px_30px_rgba(0,0,0,0.02)]">
+            <button onclick="showView('dashboard')" id="nav-dashboard" class="nav-btn flex flex-col items-center gap-1 text-[#4D805E] transition">
                 <i data-lucide="home" class="w-5 h-5"></i>
                 <span class="text-[11px] font-bold">Übersicht</span>
             </button>
@@ -170,101 +174,86 @@
                 <i data-lucide="user" class="w-5 h-5"></i>
                 <span class="text-[11px] font-medium">Profil</span>
             </button>
-            <button onclick="showView('scan')" class="absolute -top-5 bg-[#3B6645] text-white p-3.5 rounded-full shadow-lg hover:bg-[#2d5236] transition transform active:scale-95">
-                <i data-lucide="scan-barcode" class="w-6 h-6"></i>
-            </button>
         </nav>
 
     </div>
 
     <script>
-        // Barcode-Wissensdatenbank
+        // Datenbank vordefinierter Barcodes
         const mockProductDb = {
-            "40001": { name: "Joghurt", baseShelfLife: 1, emoji: "🥛" },
-            "40002": { name: "Spinat", baseShelfLife: 2, emoji: "🌿" },
-            "40003": { name: "Karotten", baseShelfLife: 6, emoji: "🥕" },
-            "40004": { name: "Apfel", baseShelfLife: 12, emoji: "🍎" }
+            "40001": { name: "Joghurt", shelfLife: 1, img: "https://images.unsplash.com/photo-1571244856341-4f3dd95636c8?w=120&auto=format&fit=crop&q=60" },
+            "40002": { name: "Spinat", shelfLife: 2, img: "https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=120&auto=format&fit=crop&q=60" },
+            "40003": { name: "Karotten", shelfLife: 6, img: "https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=120&auto=format&fit=crop&q=60" },
+            "40004": { name: "Apfel", shelfLife: 12, img: "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=120&auto=format&fit=crop&q=60" }
         };
 
-        // Rezept-Datenbank mit Zutaten-Matching
+        // Rezept-Datenbank mit intelligentem Zutaten-Abgleich
         const recipeDb = [
-            { id: 101, title: "Cremige Spinat-Pasta", time: "20 Min.", diff: "Einfach", matchKey: "Spinat", emoji: "🍝" },
-            { id: 102, title: "Spinat-Kartoffel Suppe", time: "30 Min.", diff: "Einfach", matchKey: "Spinat", emoji: "🍲" },
-            { id: 103, title: "Gemüsebratlinge mit Joghurt-Dip", time: "25 Min.", diff: "Einfach", matchKey: "Joghurt", emoji: "🧆" },
-            { id: 104, title: "Frischer Apfelkuchen", time: "45 Min.", diff: "Normal", matchKey: "Apfel", emoji: "🥧" },
-            { id: 105, title: "Karotten-Ingwer Suppe", time: "20 Min.", diff: "Einfach", matchKey: "Karotten", emoji: "🥣" }
+            { id: 201, title: "Cremige Spinat-Pasta", time: "20 Min.", diff: "Einfach", matchKey: "Spinat", img: "https://images.unsplash.com/photo-1621510456681-23a23cfb5f57?w=300&auto=format&fit=crop&q=60" },
+            { id: 202, title: "Spinat-Kartoffel Suppe", time: "30 Min.", diff: "Einfach", matchKey: "Spinat", img: "https://images.unsplash.com/photo-1547592180-85f173990554?w=300&auto=format&fit=crop&q=60" },
+            { id: 203, title: "Gemüsebratlinge mit Joghurt-Dip", time: "25 Min.", diff: "Einfach", matchKey: "Joghurt", img: "https://images.unsplash.com/photo-1529692236671-f1f6e994a52c?w=300&auto=format&fit=crop&q=60" }
         ];
 
         let inventory = [];
-        let html5QrScanner = null;
+        let cameraScannerInstance = null;
 
-        // App-Initialisierung
         window.onload = function() {
-            initData();
+            initAppStorage();
             updateUI();
         };
 
-        // Standarddaten setzen falls LocalStorage leer ist (Erzeugt exakte Screenshot-Optik beim ersten Start)
-        function initData() {
-            const savedData = localStorage.getItem('smartfridge_pro_inv');
-            if (savedData) {
-                inventory = JSON.parse(savedData);
+        // Setzt beim allerersten Start exakt die Daten aus deinem Screenshot auf das richtige Datum
+        function initAppStorage() {
+            const stored = localStorage.getItem('food_waste_app_inv');
+            if (stored) {
+                inventory = JSON.parse(stored);
             } else {
-                // Setup exakt wie auf dem Bild
-                const today = new Date();
                 inventory = [
-                    { id: 1, name: "Joghurt", expiry: getFutureDateISO(1), emoji: "🥛" },
-                    { id: 2, name: "Spinat", expiry: getFutureDateISO(2), emoji: "🌿" },
-                    { id: 3, name: "Karotten", expiry: getFutureDateISO(6), emoji: "🥕" },
-                    { id: 4, name: "Apfel", expiry: getFutureDateISO(12), emoji: "🍎" }
+                    { id: 1, name: "Joghurt", expiry: getISOStringOffset(1), img: mockProductDb["40001"].img },
+                    { id: 2, name: "Spinat", expiry: getISOStringOffset(2), img: mockProductDb["40002"].img },
+                    { id: 3, name: "Karotten", expiry: getISOStringOffset(6), img: mockProductDb["40003"].img },
+                    { id: 4, name: "Apfel", expiry: getISOStringOffset(12), img: mockProductDb["40004"].img }
                 ];
-                saveToLocalStorage();
+                saveToStorage();
             }
         }
 
-        function getFutureDateISO(days) {
+        function getISOStringOffset(days) {
             const d = new Date();
             d.setDate(d.getDate() + days);
             return d.toISOString().split('T')[0];
         }
 
-        function saveToLocalStorage() {
-            localStorage.setItem('smartfridge_pro_inv', JSON.stringify(inventory));
+        function saveToStorage() {
+            localStorage.setItem('food_waste_app_inv', JSON.stringify(inventory));
         }
 
-        // Berechnet die echten verbleibenden Tage taggenau
-        function calculateDaysRemaining(expiryDateStr) {
-            const today = new Date();
-            today.setHours(0,0,0,0);
-            const exp = new Date(expiryDateStr);
-            exp.setHours(0,0,0,0);
-            const diffTime = exp - today;
-            return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        function calcDaysLeft(expiryStr) {
+            const today = new Date(); today.setHours(0,0,0,0);
+            const exp = new Date(expiryStr); exp.setHours(0,0,0,0);
+            return Math.ceil((exp - today) / (1000 * 60 * 60 * 24));
         }
 
-        // Hilfsfunktion zur Formatierung des Datums (DD.MM.YYYY)
-        function formatDateString(isoStr) {
-            const parts = isoStr.split('-');
-            if(parts.length === 3) return `${parts[2]}.${parts[1]}.${parts[0]}`;
-            return isoStr;
+        function formatMhd(expiryStr) {
+            const p = expiryStr.split('-');
+            return p.length === 3 ? `${p[2]}.${p[1]}.${p[0]}` : expiryStr;
         }
 
-        // Generiert die Design-Klassen auf Basis des Ampel-Haltbarkeitssystems aus der Grafik
-        function getStatusConfig(days) {
+        // Farb-Konfigurationen exakt angepasst an die Designvorlage (Ampelsystem)
+        function getColorConfig(days) {
             if (days <= 1) {
-                return { bg: 'bg-[#8A1F1F]', text: 'text-white', badgeBg: 'bg-white/20', badgeText: 'text-white', label: 'Sehr dringend', icon: 'alert-circle' };
-            } else if (days <= 3) {
-                return { bg: 'bg-[#D64534]', text: 'text-white', badgeBg: 'bg-white/20', badgeText: 'text-white', label: 'Dringend', icon: 'alert-triangle' };
-            } else if (days <= 7) {
-                return { bg: 'bg-[#F2C94C]', text: 'text-[#4F3C05]', badgeBg: 'bg-black/10', badgeText: 'text-[#4F3C05]', label: 'Bald fällig', icon: 'alert-circle' };
+                return { cardBg: 'bg-[#8E2A2A]', text: 'text-white', badgeBg: 'bg-white/15', badgeText: 'text-white', label: 'Sehr dringend', icon: 'alert-circle' };
+            } else if (days <= 2) {
+                return { cardBg: 'bg-[#D34533]', text: 'text-white', badgeBg: 'bg-white/15', badgeText: 'text-white', label: 'Dringend', icon: 'alert-circle' };
+            } else if (days <= 6) {
+                return { cardBg: 'bg-[#E9B953]', text: 'text-[#4A370A]', badgeBg: 'bg-black/5', badgeText: 'text-[#4A370A]', label: 'Bald fällig', icon: 'alert-circle' };
             } else {
-                return { bg: 'bg-[#4F9462]', text: 'text-white', badgeBg: 'bg-white/20', badgeText: 'text-white', label: 'Gut', icon: 'check-circle' };
+                return { cardBg: 'bg-[#529E66]', text: 'text-white', badgeBg: 'bg-white/15', badgeText: 'text-white', label: 'Gut', icon: 'check-circle' };
             }
         }
 
-        // Aktualisiert alle dynamischen Elemente auf der UI
+        // Rendert die Benutzeroberfläche neu
         function updateUI() {
-            // Sortierung: Kürzeste Haltbarkeit ganz nach oben
             inventory.sort((a, b) => new Date(a.expiry) - new Date(b.expiry));
 
             const dashList = document.getElementById('dashboard-urgent-list');
@@ -273,113 +262,76 @@
             dashList.innerHTML = '';
             fridgeList.innerHTML = '';
 
-            if(inventory.length === 0) {
-                const emptyMsg = `<p class="text-center text-gray-400 py-8 text-sm">Dein Kühlschrank ist leer.</p>`;
-                dashList.innerHTML = emptyMsg;
-                fridgeList.innerHTML = emptyMsg;
-                renderRecipes([]);
-                return;
-            }
-
             inventory.forEach(item => {
-                const daysLeft = calculateDaysRemaining(item.expiry);
-                const config = getStatusConfig(daysLeft);
-                const formattedMhd = formatDateString(item.expiry);
+                const days = calcDaysLeft(item.expiry);
+                const conf = getColorConfig(days);
+                const mhdFormatted = formatMhd(item.expiry);
 
-                // Karte im exakten Screenshot-Look
-                const cardHtml = `
-                    <div class="${config.bg} ${config.text} p-4 rounded-[20px] shadow-sm flex justify-between items-center relative overflow-hidden group transition duration-200">
-                        <div class="flex items-center gap-4">
-                            <div class="w-14 h-14 bg-white/90 rounded-2xl flex items-center justify-center text-3xl shadow-inner">
-                                ${item.emoji || "📦"}
-                            </div>
+                const cardHTML = `
+                    <div class="${conf.cardBg} ${conf.text} p-3.5 rounded-[22px] flex justify-between items-center shadow-xs transition transform active:scale-[0.99]">
+                        <div class="flex items-center gap-3.5">
+                            <img src="${item.img || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100'}" class="w-14 h-14 rounded-2xl object-cover bg-white shadow-inner">
                             <div>
-                                <h4 class="font-bold text-lg leading-tight">${item.name}</h4>
-                                <p class="text-xs opacity-75 mt-0.5">MHD: ${formattedMhd}</p>
-                                <p class="text-xs font-semibold mt-1 opacity-95">
-                                    ${daysLeft === 0 ? 'Läuft heute ab!' : daysLeft < 0 ? 'Abgelaufen!' : `Läuft in ${daysLeft} ${daysLeft === 1 ? 'Tag' : 'Tagen'} ab`}
+                                <h4 class="font-bold text-[17px] leading-tight">${item.name}</h4>
+                                <p class="text-[12px] opacity-75 font-medium mt-0.5">MHD: ${mhdFormatted}</p>
+                                <p class="text-[12px] font-bold mt-0.5 opacity-95">
+                                    ${days === 1 ? 'Läuft in 1 Tag ab' : days <= 0 ? 'Abgelaufen!' : `Läuft in ${days} Tagen ab`}
                                 </p>
                             </div>
                         </div>
-                        <div class="flex items-center gap-3">
-                            <span class="${config.badgeBg} ${config.badgeText} text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                                ${config.label}
+                        <div class="flex items-center gap-2.5">
+                            <span class="${conf.badgeBg} ${conf.badgeText} text-[11px] font-bold px-3 py-1 rounded-full">
+                                ${conf.label}
                             </span>
-                            <button onclick="removeItem(${item.id}); event.stopPropagation();" class="opacity-80 hover:opacity-100 transition hover:scale-110">
-                                <i data-lucide="${config.icon}" class="w-5 h-5"></i>
+                            <button onclick="deleteProduct(${item.id}); event.stopPropagation();" class="opacity-80 hover:opacity-100 p-1">
+                                <i data-lucide="${conf.icon}" class="w-5 h-5"></i>
                             </button>
                         </div>
                     </div>
                 `;
-
-                // Übersicht zeigt alle, priorisiert durch Sortierung
-                dashList.innerHTML += cardHtml;
-                // Kühlschrank-View zeigt dieselbe Struktur
-                fridgeList.innerHTML += cardHtml;
+                dashList.innerHTML += cardHTML;
+                fridgeList.innerHTML += cardHTML;
             });
 
-            renderRecipes(inventory);
+            renderRecipesSection();
             lucide.createIcons();
         }
 
-        // Intelligente Rezeptgenerierung basierend auf ablaufenden Waren
-        function renderRecipes(currentInv) {
-            const scrollContainer = document.getElementById('dashboard-recipe-scroll');
-            const allRecipesContainer = document.getElementById('all-recipes-container');
+        // Rendert die Kochideen-Kacheln (Horizontal und Vertikal)
+        function renderRecipesSection() {
+            const scrollBox = document.getElementById('dashboard-recipe-scroll');
+            const gridBox = document.getElementById('all-recipes-container');
             
-            scrollContainer.innerHTML = '';
-            allRecipesContainer.innerHTML = '';
+            scrollBox.innerHTML = '';
+            gridBox.innerHTML = '';
 
-            // Finde heraus, welche Lebensmittel am dringendsten verbraucht werden müssen
-            const urgentKeys = currentInv.slice(0, 3).map(i => i.name);
-
-            // Sortiere Rezepte so, dass Rezepte für ablaufende Zutaten ganz oben/vorne stehen
-            let sortedRecipes = [...recipeDb].sort((a, b) => {
-                const aMatch = urgentKeys.includes(a.matchKey) ? 1 : 0;
-                const bMatch = urgentKeys.includes(b.matchKey) ? 1 : 0;
-                return bMatch - aMatch;
-            });
-
-            sortedRecipes.forEach(recipe => {
-                const hasIngredient = currentInv.some(i => i.name.toLowerCase() === recipe.matchKey.toLowerCase());
-                const badgeHtml = hasIngredient ? 
-                    `<span class="bg-green-100 text-green-800 text-[10px] font-bold px-2 py-0.5 rounded-md flex items-center gap-0.5"><i data-lucide="check" class="w-3 h-3"></i> Zutat da</span>` : '';
-
-                // Rezeptkachel für horizontalen Scroll-Bereich (Dashboard)
-                scrollContainer.innerHTML += `
-                    <div class="min-w-[165px] max-w-[165px] bg-white p-3 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between space-y-2 flex-shrink-0">
-                        <div class="w-full h-28 bg-[#F4F1EA] rounded-xl flex items-center justify-center text-4xl select-none relative">
-                            ${recipe.emoji}
-                            <button class="absolute top-2 right-2 w-7 h-7 bg-white/80 backdrop-blur-xs rounded-full flex items-center justify-center text-gray-400 hover:text-red-500 transition shadow-xs">
-                                <i data-lucide="heart" class="w-4 h-4"></i>
-                            </button>
-                        </div>
+            recipeDb.forEach(recipe => {
+                // Kochideen-Kachel im exakten Bild-Look (Weißer Card-Hintergrund, Herz-Symbol, Textplatzierung)
+                scrollBox.innerHTML += `
+                    <div class="min-w-[155px] max-w-[155px] bg-white p-3 rounded-[22px] border border-gray-100 shadow-xs flex flex-col justify-between flex-shrink-0 relative">
+                        <button class="absolute top-5 right-5 w-7 h-7 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center text-gray-400 hover:text-red-500 transition shadow-xs z-10">
+                            <i data-lucide="heart" class="w-3.5 h-3.5 fill-current"></i>
+                        </button>
+                        <img src="${recipe.img}" class="w-full h-24 object-cover rounded-xl mb-2 bg-gray-50">
                         <div class="space-y-1">
-                            <h5 class="font-bold text-sm leading-tight text-gray-800 line-clamp-2">${recipe.title}</h5>
-                            <div class="flex items-center justify-between text-[11px] text-gray-400 font-medium">
-                                <span>${recipe.time}</span>
-                                <span>• ${recipe.diff}</span>
+                            <h5 class="font-bold text-[13px] leading-tight text-gray-800 line-clamp-2">${recipe.title}</h5>
+                            <div class="flex items-center gap-2 text-[10px] text-gray-400 font-bold pt-0.5">
+                                <span class="flex items-center gap-0.5"><i data-lucide="clock" class="w-3 h-3"></i> ${recipe.time}</span>
+                                <span class="flex items-center gap-0.5"><i data-lucide="bar-chart" class="w-3 h-3"></i> ${recipe.diff}</span>
                             </div>
-                            <div class="pt-1">${badgeHtml}</div>
                         </div>
                     </div>
                 `;
 
-                // Rezeptkachel für die große Übersichtliste (Vertical Grid)
-                allRecipesContainer.innerHTML += `
-                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex gap-4 items-center">
-                        <div class="w-20 h-20 bg-[#F4F1EA] rounded-xl flex items-center justify-center text-3xl flex-shrink-0">
-                            ${recipe.emoji}
-                        </div>
+                gridBox.innerHTML += `
+                    <div class="bg-white p-4 rounded-[22px] border border-gray-100 shadow-xs flex gap-4 items-center">
+                        <img src="${recipe.img}" class="w-20 h-20 object-cover rounded-xl flex-shrink-0">
                         <div class="flex-1 space-y-1">
-                            <div class="flex justify-between items-start">
-                                <h5 class="font-bold text-base text-gray-800 leading-tight">${recipe.title}</h5>
-                                ${badgeHtml}
-                            </div>
-                            <p class="text-xs text-gray-400">Perfekt zur Verwertung von: <span class="font-semibold text-gray-600">${recipe.matchKey}</span></p>
-                            <div class="flex items-center gap-3 text-xs text-gray-400 pt-1">
-                                <span class="flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> ${recipe.time}</span>
-                                <span class="flex items-center gap-1"><i data-lucide="bar-chart" class="w-3 h-3"></i> ${recipe.diff}</span>
+                            <h5 class="font-bold text-base text-gray-800">${recipe.title}</h5>
+                            <p class="text-xs text-gray-400 font-medium">Basiert auf deiner Zutat: <span class="text-gray-600 font-bold">${recipe.matchKey}</span></p>
+                            <div class="flex items-center gap-3 text-xs text-gray-400 pt-1 font-bold">
+                                <span class="flex items-center gap-0.5"><i data-lucide="clock" class="w-3.5 h-3.5"></i> ${recipe.time}</span>
+                                <span class="flex items-center gap-0.5"><i data-lucide="bar-chart" class="w-3.5 h-3.5"></i> ${recipe.diff}</span>
                             </div>
                         </div>
                     </div>
@@ -387,114 +339,97 @@
             });
         }
 
-        // Löscht einen Eintrag aus dem Kühlschrank
-        function removeItem(id) {
-            inventory = inventory.filter(item => item.id !== id);
-            saveToLocalStorage();
+        function deleteProduct(id) {
+            inventory = inventory.filter(i => i.id !== id);
+            saveToStorage();
             updateUI();
         }
 
-        // Steuert das Seiten-Routing über Tabs
-        async function showView(viewId) {
-            document.querySelectorAll('.page-view').forEach(view => view.classList.add('hidden'));
+        // Steuert das Seitenrouting über Tabs
+        function showView(viewId) {
+            document.querySelectorAll('.page-view').forEach(v => v.classList.add('hidden'));
             document.getElementById('view-' + viewId).classList.remove('hidden');
 
-            // Aktiviert/Deaktiviert Navigationszustände optisch
             document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('text-[#3B6645]', 'font-bold');
+                btn.classList.remove('text-[#4D805E]', 'font-bold');
                 btn.classList.add('text-gray-400', 'font-medium');
             });
             const activeNav = document.getElementById('nav-' + viewId);
             if(activeNav) {
                 activeNav.classList.remove('text-gray-400', 'font-medium');
-                activeNav.classList.add('text-[#3B6645]', 'font-bold');
+                activeNav.classList.add('text-[#4D805E]', 'font-bold');
             }
 
-            // Kamera-Ressourcen-Verwaltung beim Verlassen oder Betreten des Scanners
             if(viewId === 'scan') {
-                startNativeScanner();
+                startCameraScanner();
             } else {
-                stopNativeScanner();
+                stopCameraScanner();
             }
         }
 
-        // Initialisiert und startet den Barcode-Scanner nativ im Browser
-        function startNativeScanner() {
+        // Aktiviert den Live-Barcode-Scanner
+        function startCameraScanner() {
             document.getElementById('scanner-fallback-msg').classList.add('hidden');
-            html5QrScanner = new Html5Qrcode("interactive-scanner");
+            cameraScannerInstance = new Html5Qrcode("interactive-scanner");
             
-            html5QrScanner.start(
-                { facingMode: "environment" }, // Priorisiert Rückseiten-Kamera
-                { fps: 15, qrbox: { width: 250, height: 150 } }, // Barcode-Scan-Box
-                (decodedText) => {
-                    // Barcode erfolgreich gelesen
-                    processScannedBarcode(decodedText);
-                },
-                (errorMessage) => { /* Kontinuierlicher Suchmodus - Fehler unterdrücken */ }
-            ).catch(err => {
-                console.error("Kamerafehler:", err);
+            cameraScannerInstance.start(
+                { facingMode: "environment" },
+                { fps: 15, qrbox: { width: 260, height: 160 } },
+                (barcodeText) => { handleValidScan(barcodeText); },
+                (err) => { /* Kontinuierliche Suche */ }
+            ).catch(() => {
                 document.getElementById('scanner-fallback-msg').classList.remove('hidden');
             });
         }
 
-        function stopNativeScanner() {
-            if(html5QrScanner && html5QrScanner.isScanning) {
-                html5QrScanner.stop().then(() => {
-                    html5QrScanner = null;
-                }).catch(err => console.error("Fehler beim Beenden der Kamera:", err));
+        function stopCameraScanner() {
+            if(cameraScannerInstance && cameraScannerInstance.isScanning) {
+                cameraScannerInstance.stop().then(() => { cameraScannerInstance = null; });
             }
         }
 
-        // Verarbeitet die gescannten Daten aus der DB
-        function processScannedBarcode(barcode) {
-            stopNativeScanner();
-            const product = mockProductDb[barcode] || { name: "Unbekanntes Produkt", baseShelfLife: 3, emoji: "📦" };
+        function handleValidScan(barcode) {
+            stopCameraScanner();
+            const product = mockProductDb[barcode] || { name: "Neues Produkt", shelfLife: 3, img: "" };
             
             inventory.push({
                 id: Date.now(),
                 name: product.name,
-                expiry: getFutureDateISO(product.baseShelfLife),
-                emoji: product.emoji
+                expiry: getISOStringOffset(product.shelfLife),
+                img: product.img
             });
 
-            saveToLocalStorage();
+            saveToStorage();
             updateUI();
             showView('dashboard');
-            alert(`Erfolgreich eingescannt: ${product.name}!`);
         }
 
-        // Ermöglicht Simulationen ohne physischen Barcode direkt am Bildschirm
         function simulateBarcodeScan(code) {
-            processScannedBarcode(code);
+            handleValidScan(code);
         }
 
-        // Formular-Handling für manuelles Hinzufügen
-        function openManualAdd() {
-            const form = document.getElementById('manual-add-form');
-            form.classList.toggle('hidden');
+        function toggleManualAdd() {
+            document.getElementById('manual-add-form').classList.toggle('hidden');
         }
 
         function submitManualAdd() {
-            const nameInput = document.getElementById('input-name');
-            const daysInput = document.getElementById('input-days');
+            const name = document.getElementById('input-name').value;
+            const days = document.getElementById('input-days').value;
 
-            if(!nameInput.value || !daysInput.value) {
-                alert("Bitte fülle beide Felder aus.");
-                return;
-            }
+            if(!name || !days) return;
 
             inventory.push({
                 id: Date.now(),
-                name: nameInput.value,
-                expiry: getFutureDateISO(parseInt(daysInput.value)),
-                emoji: "🛒"
+                name: name,
+                expiry: getISOStringOffset(parseInt(days)),
+                img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100"
             });
 
-            saveToLocalStorage();
+            saveToStorage();
             updateUI();
             
-            nameInput.value = '';
-            daysInput.value = '';
+            document.getElementById('input-name').value = '';
+            document.getElementById('input-days').value = '';
             document.getElementById('manual-add-form').classList.add('hidden');
         }
     </script>

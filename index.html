@@ -3,141 +3,500 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartFridge Pro</title>
+    <title>Reduce Food Waste App</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://unpkg.com/html5-qrcode"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #FCFAF7;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .custom-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
 </head>
-<body class="bg-gray-50 min-h-screen pb-24">
+<body class="text-[#2D2A26] min-h-screen pb-28 selection:bg-green-100">
 
-    <header class="bg-indigo-700 text-white p-6 shadow-md">
-        <h1 class="text-2xl font-bold flex items-center gap-2">
-            <i data-lucide="refrigerator"></i> SmartFridge Pro
-        </h1>
-        <p class="text-indigo-200 text-xs mt-1">Dein digitaler Haltbarkeits-Assistent</p>
-    </header>
-
-    <main class="max-w-md mx-auto p-4 space-y-6">
+    <div class="max-w-md mx-auto min-h-screen flex flex-col justify-between relative bg-[#FCFAF7]">
         
-        <section id="view-dashboard" class="page-view space-y-6">
-            <div id="urgent-section" class="hidden">
-                <h2 class="text-sm font-bold text-red-600 uppercase tracking-widest mb-3">⚠️ Bald ablaufen</h2>
-                <div id="urgent-list" class="space-y-3"></div>
+        <div id="view-dashboard" class="page-view p-6 space-y-6">
+            <div class="flex justify-between items-center">
+                <button class="text-[#1B4332] hover:scale-105 transition"><i data-lucide="menu" class="w-6 h-6"></i></button>
+                <div class="flex items-center gap-2">
+                    <div class="w-6 h-6 bg-[#3B6645] rounded-full flex items-center justify-center text-white text-[10px]">🌱</div>
+                    <span class="text-xs font-bold tracking-widest uppercase text-[#3B6645]">reduce food waste</span>
+                </div>
+                <button class="text-[#1B4332] relative hover:scale-105 transition">
+                    <i data-lucide="bell" class="w-6 h-6"></i>
+                    <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+                </button>
             </div>
 
-            <div>
-                <h2 class="text-sm font-bold text-gray-500 uppercase tracking-widest mb-3">Kühlschrank Inhalt</h2>
-                <div id="inventory-list" class="space-y-3"></div>
+            <div class="flex justify-between items-start pt-2">
+                <div>
+                    <h1 class="text-4xl font-extrabold tracking-tight text-[#1A1A1A]">Halli Hallo!</h1>
+                    <p class="text-lg text-gray-500 mt-1">Wer Essen rettet, rettet Leben 🌿</p>
+                </div>
+                <div class="relative">
+                    <div class="w-20 h-20 bg-[#EAE7DC] rounded-full overflow-hidden flex items-center justify-center text-4xl shadow-sm">
+                        🗑️
+                    </div>
+                    <span class="absolute -top-2 -right-1 text-2xl">🐦</span>
+                </div>
             </div>
-        </section>
 
-        <section id="view-scan" class="page-view hidden">
-            <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200">
-                <div id="reader" class="w-full rounded-lg overflow-hidden"></div>
-                <p class="text-xs text-center text-gray-400 mt-4">Kamera auf Barcode richten.</p>
+            <div class="space-y-3">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-bold text-lg text-[#1A1A1A]">Bald ablaufende Lebensmittel</h3>
+                    <button onclick="showView('fridge')" class="text-[#3B6645] text-sm font-semibold hover:underline">Alle anzeigen</button>
+                </div>
+                <div id="dashboard-urgent-list" class="space-y-3">
+                    </div>
             </div>
-        </section>
 
-        <section id="view-recipes" class="page-view hidden space-y-4">
-            <h2 class="text-sm font-bold text-gray-500 uppercase tracking-widest">Kochideen für Reste</h2>
-            <div id="recipe-list" class="space-y-4"></div>
-        </section>
-    </main>
+            <div class="space-y-3">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-bold text-lg text-[#1A1A1A]">Passende Kochideen für dich</h3>
+                    <button onclick="showView('recipes')" class="text-[#3B6645] text-sm font-semibold hover:underline">Alle anzeigen</button>
+                </div>
+                <div id="dashboard-recipe-scroll" class="flex gap-4 overflow-x-auto custom-scrollbar pb-2">
+                    </div>
+            </div>
 
-    <nav class="fixed bottom-0 w-full bg-white border-t border-gray-200 flex justify-around p-4 z-50">
-        <button onclick="showView('dashboard')" class="nav-link text-indigo-600" data-view="dashboard"><i data-lucide="layout-dashboard"></i></button>
-        <button onclick="showView('scan')" class="nav-link text-gray-400" data-view="scan"><i data-lucide="scan-barcode"></i></button>
-        <button onclick="showView('recipes')" class="nav-link text-gray-400" data-view="recipes"><i data-lucide="chef-hat"></i></button>
-    </nav>
+            <div class="bg-[#EBF2EE] p-4 rounded-2xl flex items-center justify-between border border-[#D5E4DB] cursor-pointer hover:bg-[#e2ebe5] transition" onclick="showView('profile')">
+                <div class="flex items-center gap-4">
+                    <div class="text-3xl">🌱</div>
+                    <div>
+                        <h4 class="font-bold text-[#1B4332] text-sm">Du machst einen Unterschied!</h4>
+                        <p class="text-xs text-[#3B6645] mt-0.5">So hast du diese Woche bereits <span id="stat-weight" class="font-bold">1,2</span> kg Lebensmittel gerettet.</p>
+                    </div>
+                </div>
+                <i data-lucide="chevron-right" class="w-5 h-5 text-[#3B6645]"></i>
+            </div>
+        </div>
+
+        <div id="view-fridge" class="page-view p-6 space-y-6 hidden">
+            <div class="flex justify-between items-center">
+                <h1 class="text-2xl font-bold text-[#1A1A1A]">Mein Kühlschrank</h1>
+                <button onclick="openManualAdd()" class="bg-[#3B6645] text-white px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1 hover:bg-[#2d5236] transition">
+                    <i data-lucide="plus" class="w-3 h-3"></i> Neu
+                </button>
+            </div>
+
+            <div id="manual-add-form" class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm space-y-3 hidden">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400">Produkt hinzufügen</h3>
+                <div class="grid grid-cols-2 gap-2">
+                    <input id="input-name" type="text" placeholder="Name (z.B. Käse)" class="p-2 border rounded-xl text-sm bg-[#FCFAF7] focus:outline-green-600">
+                    <input id="input-days" type="number" placeholder="Haltbar in Tagen" class="p-2 border rounded-xl text-sm bg-[#FCFAF7] focus:outline-green-600">
+                </div>
+                <button onclick="submitManualAdd()" class="w-full bg-[#3B6645] text-white py-2 rounded-xl text-sm font-bold">Im Kühlschrank lagern</button>
+            </div>
+
+            <div id="full-fridge-list" class="space-y-3">
+                </div>
+        </div>
+
+        <div id="view-scan" class="page-view p-6 space-y-4 hidden">
+            <h1 class="text-2xl font-bold text-[#1A1A1A]">Produkt scannen</h1>
+            <p class="text-sm text-gray-500">Halte den Barcode der Verpackung zentriert vor die Kamera.</p>
+            
+            <div class="bg-white p-2 rounded-3xl border border-gray-100 shadow-sm overflow-hidden relative">
+                <div id="interactive-scanner" class="w-full rounded-2xl bg-black aspect-square overflow-hidden"></div>
+                <div id="scanner-fallback-msg" class="hidden absolute inset-0 bg-white p-6 flex flex-col items-center justify-center text-center">
+                    <i data-lucide="camera-off" class="w-12 h-12 text-red-400 mb-2"></i>
+                    <p class="text-sm font-semibold text-gray-700">Kamera-Zugriff blockiert oder nicht unterstützt.</p>
+                    <p class="text-xs text-gray-400 mt-1">Nutze die manuelle Eingabe im Kühlschrank-Tab oder simuliere einen Scan unten.</p>
+                </div>
+            </div>
+
+            <div class="bg-gray-100 p-4 rounded-2xl text-center">
+                <p class="text-xs font-medium text-gray-500 mb-2">Kein echtes Produkt zur Hand?</p>
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="simulateBarcodeScan('40002')" class="bg-white hover:bg-gray-50 text-xs py-2 px-3 border rounded-xl font-medium transition">Simuliere: Spinat</button>
+                    <button onclick="simulateBarcodeScan('40001')" class="bg-white hover:bg-gray-50 text-xs py-2 px-3 border rounded-xl font-medium transition">Simuliere: Joghurt</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-recipes" class="page-view p-6 space-y-4 hidden">
+            <h1 class="text-2xl font-bold text-[#1A1A1A]">Alle Kochideen</h1>
+            <p class="text-sm text-gray-500">Diese Rezepte passen ideal zu deinen ablaufenden Lebensmitteln im Kühlschrank.</p>
+            <div id="all-recipes-container" class="grid grid-cols-1 gap-4 pt-2">
+                </div>
+        </div>
+
+        <div id="view-profile" class="page-view p-6 space-y-6 hidden">
+            <h1 class="text-2xl font-bold text-[#1A1A1A]">Mein Profil</h1>
+            <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm text-center space-y-4">
+                <div class="w-20 h-20 bg-green-100 text-green-700 rounded-full mx-auto flex items-center justify-center text-3xl font-bold">U</div>
+                <div>
+                    <h2 class="text-xl font-bold">Premium Lebensmittel-Retter</h2>
+                    <p class="text-xs text-gray-400 mt-0.5">Mitglied seit 2024</p>
+                </div>
+                <div class="grid grid-cols-2 gap-4 pt-2 border-t text-left">
+                    <div>
+                        <span class="text-xs text-gray-400 block">Gerettet gesamt</span>
+                        <span class="text-lg font-bold text-[#3B6645]">24,8 kg</span>
+                    </div>
+                    <div>
+                        <span class="text-xs text-gray-400 block">Diese Woche</span>
+                        <span class="text-lg font-bold text-[#3B6645]">1,2 kg</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <nav class="fixed bottom-0 max-w-md w-full bg-white border-t border-gray-100 flex justify-around py-3 px-2 shadow-[0_-10px_30px_rgba(0,0,0,0.03)] z-50 rounded-t-3xl">
+            <button onclick="showView('dashboard')" id="nav-dashboard" class="nav-btn flex flex-col items-center gap-1 text-[#3B6645] transition">
+                <i data-lucide="home" class="w-5 h-5"></i>
+                <span class="text-[11px] font-bold">Übersicht</span>
+            </button>
+            <button onclick="showView('fridge')" id="nav-fridge" class="nav-btn flex flex-col items-center gap-1 text-gray-400 transition">
+                <i data-lucide="refrigerator" class="w-5 h-5"></i>
+                <span class="text-[11px] font-medium">Kühlschrank</span>
+            </button>
+            <button onclick="showView('recipes')" id="nav-recipes" class="nav-btn flex flex-col items-center gap-1 text-gray-400 transition">
+                <i data-lucide="chef-hat" class="w-5 h-5"></i>
+                <span class="text-[11px] font-medium">Rezepte</span>
+            </button>
+            <button onclick="showView('profile')" id="nav-profile" class="nav-btn flex flex-col items-center gap-1 text-gray-400 transition">
+                <i data-lucide="user" class="w-5 h-5"></i>
+                <span class="text-[11px] font-medium">Profil</span>
+            </button>
+            <button onclick="showView('scan')" class="absolute -top-5 bg-[#3B6645] text-white p-3.5 rounded-full shadow-lg hover:bg-[#2d5236] transition transform active:scale-95">
+                <i data-lucide="scan-barcode" class="w-6 h-6"></i>
+            </button>
+        </nav>
+
+    </div>
 
     <script>
-        // 1. DATENBANK-SIMULATION
-        const productDb = {
-            "40001": { name: "Milch", shelfLife: 7 },
-            "40002": { name: "Hähnchenbrust", shelfLife: 2 },
-            "40003": { name: "Tomaten", shelfLife: 4 },
-            "40004": { name: "Käse", shelfLife: 10 }
+        // Barcode-Wissensdatenbank
+        const mockProductDb = {
+            "40001": { name: "Joghurt", baseShelfLife: 1, emoji: "🥛" },
+            "40002": { name: "Spinat", baseShelfLife: 2, emoji: "🌿" },
+            "40003": { name: "Karotten", baseShelfLife: 6, emoji: "🥕" },
+            "40004": { name: "Apfel", baseShelfLife: 12, emoji: "🍎" }
         };
 
-        let inventory = JSON.parse(localStorage.getItem('fridge_inv') || '[]');
+        // Rezept-Datenbank mit Zutaten-Matching
+        const recipeDb = [
+            { id: 101, title: "Cremige Spinat-Pasta", time: "20 Min.", diff: "Einfach", matchKey: "Spinat", emoji: "🍝" },
+            { id: 102, title: "Spinat-Kartoffel Suppe", time: "30 Min.", diff: "Einfach", matchKey: "Spinat", emoji: "🍲" },
+            { id: 103, title: "Gemüsebratlinge mit Joghurt-Dip", time: "25 Min.", diff: "Einfach", matchKey: "Joghurt", emoji: "🧆" },
+            { id: 104, title: "Frischer Apfelkuchen", time: "45 Min.", diff: "Normal", matchKey: "Apfel", emoji: "🥧" },
+            { id: 105, title: "Karotten-Ingwer Suppe", time: "20 Min.", diff: "Einfach", matchKey: "Karotten", emoji: "🥣" }
+        ];
 
-        // 2. LOGIK: RENDER UI
+        let inventory = [];
+        let html5QrScanner = null;
+
+        // App-Initialisierung
+        window.onload = function() {
+            initData();
+            updateUI();
+        };
+
+        // Standarddaten setzen falls LocalStorage leer ist (Erzeugt exakte Screenshot-Optik beim ersten Start)
+        function initData() {
+            const savedData = localStorage.getItem('smartfridge_pro_inv');
+            if (savedData) {
+                inventory = JSON.parse(savedData);
+            } else {
+                // Setup exakt wie auf dem Bild
+                const today = new Date();
+                inventory = [
+                    { id: 1, name: "Joghurt", expiry: getFutureDateISO(1), emoji: "🥛" },
+                    { id: 2, name: "Spinat", expiry: getFutureDateISO(2), emoji: "🌿" },
+                    { id: 3, name: "Karotten", expiry: getFutureDateISO(6), emoji: "🥕" },
+                    { id: 4, name: "Apfel", expiry: getFutureDateISO(12), emoji: "🍎" }
+                ];
+                saveToLocalStorage();
+            }
+        }
+
+        function getFutureDateISO(days) {
+            const d = new Date();
+            d.setDate(d.getDate() + days);
+            return d.toISOString().split('T')[0];
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('smartfridge_pro_inv', JSON.stringify(inventory));
+        }
+
+        // Berechnet die echten verbleibenden Tage taggenau
+        function calculateDaysRemaining(expiryDateStr) {
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            const exp = new Date(expiryDateStr);
+            exp.setHours(0,0,0,0);
+            const diffTime = exp - today;
+            return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        }
+
+        // Hilfsfunktion zur Formatierung des Datums (DD.MM.YYYY)
+        function formatDateString(isoStr) {
+            const parts = isoStr.split('-');
+            if(parts.length === 3) return `${parts[2]}.${parts[1]}.${parts[0]}`;
+            return isoStr;
+        }
+
+        // Generiert die Design-Klassen auf Basis des Ampel-Haltbarkeitssystems aus der Grafik
+        function getStatusConfig(days) {
+            if (days <= 1) {
+                return { bg: 'bg-[#8A1F1F]', text: 'text-white', badgeBg: 'bg-white/20', badgeText: 'text-white', label: 'Sehr dringend', icon: 'alert-circle' };
+            } else if (days <= 3) {
+                return { bg: 'bg-[#D64534]', text: 'text-white', badgeBg: 'bg-white/20', badgeText: 'text-white', label: 'Dringend', icon: 'alert-triangle' };
+            } else if (days <= 7) {
+                return { bg: 'bg-[#F2C94C]', text: 'text-[#4F3C05]', badgeBg: 'bg-black/10', badgeText: 'text-[#4F3C05]', label: 'Bald fällig', icon: 'alert-circle' };
+            } else {
+                return { bg: 'bg-[#4F9462]', text: 'text-white', badgeBg: 'bg-white/20', badgeText: 'text-white', label: 'Gut', icon: 'check-circle' };
+            }
+        }
+
+        // Aktualisiert alle dynamischen Elemente auf der UI
         function updateUI() {
-            const urgentList = document.getElementById('urgent-list');
-            const invList = document.getElementById('inventory-list');
-            const urgentSection = document.getElementById('urgent-section');
+            // Sortierung: Kürzeste Haltbarkeit ganz nach oben
+            inventory.sort((a, b) => new Date(a.expiry) - new Date(b.expiry));
+
+            const dashList = document.getElementById('dashboard-urgent-list');
+            const fridgeList = document.getElementById('full-fridge-list');
             
-            urgentList.innerHTML = '';
-            invList.innerHTML = '';
-            let hasUrgent = false;
+            dashList.innerHTML = '';
+            fridgeList.innerHTML = '';
 
-            inventory.sort((a,b) => new Date(a.expiry) - new Date(b.expiry)).forEach(item => {
-                const days = Math.ceil((new Date(item.expiry) - new Date()) / (1000*60*60*24));
-                const card = `
-                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center">
-                        <div>
-                            <p class="font-bold">${item.name}</p>
-                            <p class="text-xs ${days <= 2 ? 'text-red-500 font-bold' : 'text-gray-500'}">
-                                ${days <= 0 ? 'Abgelaufen!' : days + ' Tage haltbar'}
-                            </p>
+            if(inventory.length === 0) {
+                const emptyMsg = `<p class="text-center text-gray-400 py-8 text-sm">Dein Kühlschrank ist leer.</p>`;
+                dashList.innerHTML = emptyMsg;
+                fridgeList.innerHTML = emptyMsg;
+                renderRecipes([]);
+                return;
+            }
+
+            inventory.forEach(item => {
+                const daysLeft = calculateDaysRemaining(item.expiry);
+                const config = getStatusConfig(daysLeft);
+                const formattedMhd = formatDateString(item.expiry);
+
+                // Karte im exakten Screenshot-Look
+                const cardHtml = `
+                    <div class="${config.bg} ${config.text} p-4 rounded-[20px] shadow-sm flex justify-between items-center relative overflow-hidden group transition duration-200">
+                        <div class="flex items-center gap-4">
+                            <div class="w-14 h-14 bg-white/90 rounded-2xl flex items-center justify-center text-3xl shadow-inner">
+                                ${item.emoji || "📦"}
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg leading-tight">${item.name}</h4>
+                                <p class="text-xs opacity-75 mt-0.5">MHD: ${formattedMhd}</p>
+                                <p class="text-xs font-semibold mt-1 opacity-95">
+                                    ${daysLeft === 0 ? 'Läuft heute ab!' : daysLeft < 0 ? 'Abgelaufen!' : `Läuft in ${daysLeft} ${daysLeft === 1 ? 'Tag' : 'Tagen'} ab`}
+                                </p>
+                            </div>
                         </div>
-                        <button onclick="deleteItem(${item.id})" class="text-gray-300 hover:text-red-500"><i data-lucide="trash-2"></i></button>
-                    </div>`;
+                        <div class="flex items-center gap-3">
+                            <span class="${config.badgeBg} ${config.badgeText} text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                                ${config.label}
+                            </span>
+                            <button onclick="removeItem(${item.id}); event.stopPropagation();" class="opacity-80 hover:opacity-100 transition hover:scale-110">
+                                <i data-lucide="${config.icon}" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
 
-                if (days <= 2) {
-                    urgentList.innerHTML += card;
-                    hasUrgent = true;
-                } else {
-                    invList.innerHTML += card;
-                }
+                // Übersicht zeigt alle, priorisiert durch Sortierung
+                dashList.innerHTML += cardHtml;
+                // Kühlschrank-View zeigt dieselbe Struktur
+                fridgeList.innerHTML += cardHtml;
             });
 
-            urgentSection.classList.toggle('hidden', !hasUrgent);
-            renderRecipes();
+            renderRecipes(inventory);
             lucide.createIcons();
         }
 
-        // 3. LOGIK: REZEPTE
-        function renderRecipes() {
-            const list = document.getElementById('recipe-list');
-            const urgentItems = inventory.filter(i => Math.ceil((new Date(i.expiry) - new Date()) / (1000*60*60*24)) <= 3);
+        // Intelligente Rezeptgenerierung basierend auf ablaufenden Waren
+        function renderRecipes(currentInv) {
+            const scrollContainer = document.getElementById('dashboard-recipe-scroll');
+            const allRecipesContainer = document.getElementById('all-recipes-container');
             
-            list.innerHTML = urgentItems.length > 0 
-                ? urgentItems.map(item => `
-                    <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-100">
-                        <h3 class="font-bold text-indigo-900">Resteverwertung: ${item.name}</h3>
-                        <p class="text-sm text-indigo-700">Da dies bald abläuft, probiere ein schnelles ${item.name}-Gericht!</p>
-                    </div>`).join('')
-                : '<p class="text-center text-gray-400 py-10">Aktuell keine dringenden Reste. Guten Appetit!</p>';
-        }
+            scrollContainer.innerHTML = '';
+            allRecipesContainer.innerHTML = '';
 
-        // 4. SCANNEN & HILFE
-        function showView(viewId) {
-            document.querySelectorAll('.page-view').forEach(v => v.classList.add('hidden'));
-            document.getElementById('view-' + viewId).classList.remove('hidden');
-            if(viewId === 'scan') startScanner();
-        }
+            // Finde heraus, welche Lebensmittel am dringendsten verbraucht werden müssen
+            const urgentKeys = currentInv.slice(0, 3).map(i => i.name);
 
-        function startScanner() {
-            const scanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
-            scanner.render((code) => {
-                const p = productDb[code] || { name: "Neues Lebensmittel", shelfLife: 3 };
-                const exp = new Date(); exp.setDate(exp.getDate() + p.shelfLife);
-                inventory.push({ id: Date.now(), name: p.name, expiry: exp.toISOString() });
-                localStorage.setItem('fridge_inv', JSON.stringify(inventory));
-                scanner.clear();
-                showView('dashboard');
-                updateUI();
+            // Sortiere Rezepte so, dass Rezepte für ablaufende Zutaten ganz oben/vorne stehen
+            let sortedRecipes = [...recipeDb].sort((a, b) => {
+                const aMatch = urgentKeys.includes(a.matchKey) ? 1 : 0;
+                const bMatch = urgentKeys.includes(b.matchKey) ? 1 : 0;
+                return bMatch - aMatch;
+            });
+
+            sortedRecipes.forEach(recipe => {
+                const hasIngredient = currentInv.some(i => i.name.toLowerCase() === recipe.matchKey.toLowerCase());
+                const badgeHtml = hasIngredient ? 
+                    `<span class="bg-green-100 text-green-800 text-[10px] font-bold px-2 py-0.5 rounded-md flex items-center gap-0.5"><i data-lucide="check" class="w-3 h-3"></i> Zutat da</span>` : '';
+
+                // Rezeptkachel für horizontalen Scroll-Bereich (Dashboard)
+                scrollContainer.innerHTML += `
+                    <div class="min-w-[165px] max-w-[165px] bg-white p-3 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between space-y-2 flex-shrink-0">
+                        <div class="w-full h-28 bg-[#F4F1EA] rounded-xl flex items-center justify-center text-4xl select-none relative">
+                            ${recipe.emoji}
+                            <button class="absolute top-2 right-2 w-7 h-7 bg-white/80 backdrop-blur-xs rounded-full flex items-center justify-center text-gray-400 hover:text-red-500 transition shadow-xs">
+                                <i data-lucide="heart" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        <div class="space-y-1">
+                            <h5 class="font-bold text-sm leading-tight text-gray-800 line-clamp-2">${recipe.title}</h5>
+                            <div class="flex items-center justify-between text-[11px] text-gray-400 font-medium">
+                                <span>${recipe.time}</span>
+                                <span>• ${recipe.diff}</span>
+                            </div>
+                            <div class="pt-1">${badgeHtml}</div>
+                        </div>
+                    </div>
+                `;
+
+                // Rezeptkachel für die große Übersichtliste (Vertical Grid)
+                allRecipesContainer.innerHTML += `
+                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex gap-4 items-center">
+                        <div class="w-20 h-20 bg-[#F4F1EA] rounded-xl flex items-center justify-center text-3xl flex-shrink-0">
+                            ${recipe.emoji}
+                        </div>
+                        <div class="flex-1 space-y-1">
+                            <div class="flex justify-between items-start">
+                                <h5 class="font-bold text-base text-gray-800 leading-tight">${recipe.title}</h5>
+                                ${badgeHtml}
+                            </div>
+                            <p class="text-xs text-gray-400">Perfekt zur Verwertung von: <span class="font-semibold text-gray-600">${recipe.matchKey}</span></p>
+                            <div class="flex items-center gap-3 text-xs text-gray-400 pt-1">
+                                <span class="flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> ${recipe.time}</span>
+                                <span class="flex items-center gap-1"><i data-lucide="bar-chart" class="w-3 h-3"></i> ${recipe.diff}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
             });
         }
 
-        function deleteItem(id) {
-            inventory = inventory.filter(i => i.id !== id);
-            localStorage.setItem('fridge_inv', JSON.stringify(inventory));
+        // Löscht einen Eintrag aus dem Kühlschrank
+        function removeItem(id) {
+            inventory = inventory.filter(item => item.id !== id);
+            saveToLocalStorage();
             updateUI();
         }
 
-        window.onload = updateUI;
+        // Steuert das Seiten-Routing über Tabs
+        async function showView(viewId) {
+            document.querySelectorAll('.page-view').forEach(view => view.classList.add('hidden'));
+            document.getElementById('view-' + viewId).classList.remove('hidden');
+
+            // Aktiviert/Deaktiviert Navigationszustände optisch
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-[#3B6645]', 'font-bold');
+                btn.classList.add('text-gray-400', 'font-medium');
+            });
+            const activeNav = document.getElementById('nav-' + viewId);
+            if(activeNav) {
+                activeNav.classList.remove('text-gray-400', 'font-medium');
+                activeNav.classList.add('text-[#3B6645]', 'font-bold');
+            }
+
+            // Kamera-Ressourcen-Verwaltung beim Verlassen oder Betreten des Scanners
+            if(viewId === 'scan') {
+                startNativeScanner();
+            } else {
+                stopNativeScanner();
+            }
+        }
+
+        // Initialisiert und startet den Barcode-Scanner nativ im Browser
+        function startNativeScanner() {
+            document.getElementById('scanner-fallback-msg').classList.add('hidden');
+            html5QrScanner = new Html5Qrcode("interactive-scanner");
+            
+            html5QrScanner.start(
+                { facingMode: "environment" }, // Priorisiert Rückseiten-Kamera
+                { fps: 15, qrbox: { width: 250, height: 150 } }, // Barcode-Scan-Box
+                (decodedText) => {
+                    // Barcode erfolgreich gelesen
+                    processScannedBarcode(decodedText);
+                },
+                (errorMessage) => { /* Kontinuierlicher Suchmodus - Fehler unterdrücken */ }
+            ).catch(err => {
+                console.error("Kamerafehler:", err);
+                document.getElementById('scanner-fallback-msg').classList.remove('hidden');
+            });
+        }
+
+        function stopNativeScanner() {
+            if(html5QrScanner && html5QrScanner.isScanning) {
+                html5QrScanner.stop().then(() => {
+                    html5QrScanner = null;
+                }).catch(err => console.error("Fehler beim Beenden der Kamera:", err));
+            }
+        }
+
+        // Verarbeitet die gescannten Daten aus der DB
+        function processScannedBarcode(barcode) {
+            stopNativeScanner();
+            const product = mockProductDb[barcode] || { name: "Unbekanntes Produkt", baseShelfLife: 3, emoji: "📦" };
+            
+            inventory.push({
+                id: Date.now(),
+                name: product.name,
+                expiry: getFutureDateISO(product.baseShelfLife),
+                emoji: product.emoji
+            });
+
+            saveToLocalStorage();
+            updateUI();
+            showView('dashboard');
+            alert(`Erfolgreich eingescannt: ${product.name}!`);
+        }
+
+        // Ermöglicht Simulationen ohne physischen Barcode direkt am Bildschirm
+        function simulateBarcodeScan(code) {
+            processScannedBarcode(code);
+        }
+
+        // Formular-Handling für manuelles Hinzufügen
+        function openManualAdd() {
+            const form = document.getElementById('manual-add-form');
+            form.classList.toggle('hidden');
+        }
+
+        function submitManualAdd() {
+            const nameInput = document.getElementById('input-name');
+            const daysInput = document.getElementById('input-days');
+
+            if(!nameInput.value || !daysInput.value) {
+                alert("Bitte fülle beide Felder aus.");
+                return;
+            }
+
+            inventory.push({
+                id: Date.now(),
+                name: nameInput.value,
+                expiry: getFutureDateISO(parseInt(daysInput.value)),
+                emoji: "🛒"
+            });
+
+            saveToLocalStorage();
+            updateUI();
+            
+            nameInput.value = '';
+            daysInput.value = '';
+            document.getElementById('manual-add-form').classList.add('hidden');
+        }
     </script>
 </body>
 </html>

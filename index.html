@@ -615,7 +615,7 @@
             }
         }
 
-        /* Tab Navigation */
+        /* Tab Navigation - JETZT ABSTURZSICHER GEGEN LUCIDE DETEKTION */
         function showView(viewId) {
             document.querySelectorAll('.page-view').forEach(v => {
                 v.classList.add('hidden');
@@ -626,19 +626,27 @@
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.classList.remove('text-[#4D805E]', 'font-extrabold', 'scale-105');
                 btn.classList.add('text-gray-400', 'font-bold');
-                btn.querySelector('i').setAttribute('stroke-width', '2');
+                
+                // Nutzt 'svg, i' um nach der Lucide-Transformation Fehler zu vermeiden
+                const icon = btn.querySelector('svg, i');
+                if (icon) icon.setAttribute('stroke-width', '2');
             });
+
             const activeNav = document.getElementById('nav-' + viewId);
             if(activeNav) {
                 activeNav.classList.remove('text-gray-400', 'font-bold');
                 activeNav.classList.add('text-[#4D805E]', 'font-extrabold', 'scale-105');
-                activeNav.querySelector('i').setAttribute('stroke-width', '2.5');
+                
+                const activeIcon = activeNav.querySelector('svg, i');
+                if (activeIcon) activeIcon.setAttribute('stroke-width', '2.5');
             }
 
             const targetView = document.getElementById('view-' + viewId);
-            targetView.classList.remove('hidden');
-            void targetView.offsetWidth; // Reflow für Animation Trigger
-            targetView.classList.add('animate-fade-in');
+            if(targetView) {
+                targetView.classList.remove('hidden');
+                void targetView.offsetWidth; // Reflow für Animation Trigger
+                targetView.classList.add('animate-fade-in');
+            }
 
             if(viewId === 'scan') { startScanner(); } else { stopScanner(); }
         }

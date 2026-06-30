@@ -7,106 +7,137 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://unpkg.com/html5-qrcode"></script>
-    <style>
-        .card-transition { transition: all 0.3s ease; }
-    </style>
 </head>
-<body class="bg-slate-50 font-sans pb-24">
+<body class="bg-gray-50 min-h-screen pb-24">
 
-    <header class="bg-indigo-700 text-white p-6 shadow-lg">
-        <h1 class="text-2xl font-bold flex items-center gap-3">
-            <i data-lucide="snowflake"></i> SmartFridge
+    <header class="bg-indigo-700 text-white p-6 shadow-md">
+        <h1 class="text-2xl font-bold flex items-center gap-2">
+            <i data-lucide="refrigerator"></i> SmartFridge Pro
         </h1>
-        <p class="text-indigo-200 text-sm mt-1">Dein digitaler Haltbarkeits-Assistent</p>
+        <p class="text-indigo-200 text-xs mt-1">Dein digitaler Haltbarkeits-Assistent</p>
     </header>
 
-    <main class="max-w-lg mx-auto p-4">
-        <section id="page-fridge" class="page-section">
-            <div id="food-list" class="space-y-4"></div>
-        </section>
+    <main class="max-w-md mx-auto p-4 space-y-6">
+        
+        <section id="view-dashboard" class="page-view space-y-6">
+            <div id="urgent-section" class="hidden">
+                <h2 class="text-sm font-bold text-red-600 uppercase tracking-widest mb-3">⚠️ Bald ablaufen</h2>
+                <div id="urgent-list" class="space-y-3"></div>
+            </div>
 
-        <section id="page-scan" class="page-section hidden">
-            <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
-                <div id="reader" class="rounded-2xl overflow-hidden"></div>
+            <div>
+                <h2 class="text-sm font-bold text-gray-500 uppercase tracking-widest mb-3">Kühlschrank Inhalt</h2>
+                <div id="inventory-list" class="space-y-3"></div>
             </div>
         </section>
 
-        <section id="page-recipes" class="page-section hidden">
-            <div id="recipe-list" class="grid gap-4"></div>
+        <section id="view-scan" class="page-view hidden">
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200">
+                <div id="reader" class="w-full rounded-lg overflow-hidden"></div>
+                <p class="text-xs text-center text-gray-400 mt-4">Kamera auf Barcode richten.</p>
+            </div>
+        </section>
+
+        <section id="view-recipes" class="page-view hidden space-y-4">
+            <h2 class="text-sm font-bold text-gray-500 uppercase tracking-widest">Kochideen für Reste</h2>
+            <div id="recipe-list" class="space-y-4"></div>
         </section>
     </main>
 
-    <nav class="fixed bottom-0 w-full bg-white border-t border-slate-200 flex justify-around p-4">
-        <button onclick="switchPage('fridge')" class="flex flex-col items-center text-indigo-600"><i data-lucide="list"></i><span class="text-[10px]">Inventar</span></button>
-        <button onclick="switchPage('scan')" class="flex flex-col items-center text-slate-400"><i data-lucide="camera"></i><span class="text-[10px]">Scannen</span></button>
-        <button onclick="switchPage('recipes')" class="flex flex-col items-center text-slate-400"><i data-lucide="chef-hat"></i><span class="text-[10px]">Rezepte</span></button>
+    <nav class="fixed bottom-0 w-full bg-white border-t border-gray-200 flex justify-around p-4 z-50">
+        <button onclick="showView('dashboard')" class="nav-link text-indigo-600" data-view="dashboard"><i data-lucide="layout-dashboard"></i></button>
+        <button onclick="showView('scan')" class="nav-link text-gray-400" data-view="scan"><i data-lucide="scan-barcode"></i></button>
+        <button onclick="showView('recipes')" class="nav-link text-gray-400" data-view="recipes"><i data-lucide="chef-hat"></i></button>
     </nav>
 
     <script>
-        // Logik für Datumsberechnung
-        function getDaysRemaining(expiryDate) {
-            const diffTime = new Date(expiryDate) - new Date();
-            return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        }
+        // 1. DATENBANK-SIMULATION
+        const productDb = {
+            "40001": { name: "Milch", shelfLife: 7 },
+            "40002": { name: "Hähnchenbrust", shelfLife: 2 },
+            "40003": { name: "Tomaten", shelfLife: 4 },
+            "40004": { name: "Käse", shelfLife: 10 }
+        };
 
-        // Farb-Logik
-        function getStatusColor(days) {
-            if (days > 7) return 'bg-emerald-100 border-emerald-500 text-emerald-900';
-            if (days > 3) return 'bg-amber-100 border-amber-500 text-amber-900';
-            return 'bg-rose-100 border-rose-500 text-rose-900';
-        }
+        let inventory = JSON.parse(localStorage.getItem('fridge_inv') || '[]');
 
-        // Inventar-Render
-        function renderFridge() {
-            const list = document.getElementById('food-list');
-            const inventory = JSON.parse(localStorage.getItem('fridge_inventory') || '[]');
+        // 2. LOGIK: RENDER UI
+        function updateUI() {
+            const urgentList = document.getElementById('urgent-list');
+            const invList = document.getElementById('inventory-list');
+            const urgentSection = document.getElementById('urgent-section');
             
-            list.innerHTML = inventory.length === 0 
-                ? '<p class="text-center text-slate-400 py-20">Kühlschrank leer. Scanne ein neues Produkt!</p>'
-                : '';
+            urgentList.innerHTML = '';
+            invList.innerHTML = '';
+            let hasUrgent = false;
 
             inventory.sort((a,b) => new Date(a.expiry) - new Date(b.expiry)).forEach(item => {
-                const days = getDaysRemaining(item.expiry);
-                const card = document.createElement('div');
-                card.className = `p-4 border-l-4 rounded-r-2xl shadow-sm ${getStatusColor(days)}`;
-                card.innerHTML = `
-                    <div class="flex justify-between items-center">
+                const days = Math.ceil((new Date(item.expiry) - new Date()) / (1000*60*60*24));
+                const card = `
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center">
                         <div>
-                            <h3 class="font-bold text-lg">${item.name}</h3>
-                            <p class="text-sm opacity-80">${days >= 0 ? days + ' Tage haltbar' : 'Abgelaufen!'}</p>
+                            <p class="font-bold">${item.name}</p>
+                            <p class="text-xs ${days <= 2 ? 'text-red-500 font-bold' : 'text-gray-500'}">
+                                ${days <= 0 ? 'Abgelaufen!' : days + ' Tage haltbar'}
+                            </p>
                         </div>
-                        <button onclick="deleteItem(${item.id})" class="p-2 hover:bg-black/5 rounded-full"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
-                    </div>
-                `;
-                list.appendChild(card);
+                        <button onclick="deleteItem(${item.id})" class="text-gray-300 hover:text-red-500"><i data-lucide="trash-2"></i></button>
+                    </div>`;
+
+                if (days <= 2) {
+                    urgentList.innerHTML += card;
+                    hasUrgent = true;
+                } else {
+                    invList.innerHTML += card;
+                }
             });
+
+            urgentSection.classList.toggle('hidden', !hasUrgent);
+            renderRecipes();
             lucide.createIcons();
         }
 
-        // Einfaches Hinzufügen (für Demo)
-        function addProduct(name, daysToAdd) {
-            const expiry = new Date();
-            expiry.setDate(expiry.getDate() + daysToAdd);
-            const inventory = JSON.parse(localStorage.getItem('fridge_inventory') || '[]');
-            inventory.push({ id: Date.now(), name, expiry: expiry.toISOString() });
-            localStorage.setItem('fridge_inventory', JSON.stringify(inventory));
-            renderFridge();
+        // 3. LOGIK: REZEPTE
+        function renderRecipes() {
+            const list = document.getElementById('recipe-list');
+            const urgentItems = inventory.filter(i => Math.ceil((new Date(i.expiry) - new Date()) / (1000*60*60*24)) <= 3);
+            
+            list.innerHTML = urgentItems.length > 0 
+                ? urgentItems.map(item => `
+                    <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-100">
+                        <h3 class="font-bold text-indigo-900">Resteverwertung: ${item.name}</h3>
+                        <p class="text-sm text-indigo-700">Da dies bald abläuft, probiere ein schnelles ${item.name}-Gericht!</p>
+                    </div>`).join('')
+                : '<p class="text-center text-gray-400 py-10">Aktuell keine dringenden Reste. Guten Appetit!</p>';
         }
 
-        // Seitenwechsel & Initialisierung
-        function switchPage(id) {
-            document.querySelectorAll('.page-section').forEach(p => p.classList.add('hidden'));
-            document.getElementById('page-' + id).classList.remove('hidden');
+        // 4. SCANNEN & HILFE
+        function showView(viewId) {
+            document.querySelectorAll('.page-view').forEach(v => v.classList.add('hidden'));
+            document.getElementById('view-' + viewId).classList.remove('hidden');
+            if(viewId === 'scan') startScanner();
+        }
+
+        function startScanner() {
+            const scanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+            scanner.render((code) => {
+                const p = productDb[code] || { name: "Neues Lebensmittel", shelfLife: 3 };
+                const exp = new Date(); exp.setDate(exp.getDate() + p.shelfLife);
+                inventory.push({ id: Date.now(), name: p.name, expiry: exp.toISOString() });
+                localStorage.setItem('fridge_inv', JSON.stringify(inventory));
+                scanner.clear();
+                showView('dashboard');
+                updateUI();
+            });
         }
 
         function deleteItem(id) {
-            let inv = JSON.parse(localStorage.getItem('fridge_inventory'));
-            inv = inv.filter(i => i.id !== id);
-            localStorage.setItem('fridge_inventory', JSON.stringify(inv));
-            renderFridge();
+            inventory = inventory.filter(i => i.id !== id);
+            localStorage.setItem('fridge_inv', JSON.stringify(inventory));
+            updateUI();
         }
 
-        window.onload = () => { renderFridge(); lucide.createIcons(); };
+        window.onload = updateUI;
     </script>
 </body>
 </html>
